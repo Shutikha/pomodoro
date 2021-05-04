@@ -1,0 +1,36 @@
+.header{
+    width: 99vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin: 5px auto;
+}
+.logo{
+    margin: 0 20px 0 10px ;
+    width: 80px;
+}
+.navs{
+    justify-self: end;   
+     display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-around;
+}
+
+.nav{
+    padding: 5px;
+}
+.nav_dark{
+    color:lightslategray;
+}
+.theme{
+    display: flex;
+    flex-direction: column;
+    margin-left: 50px;
+}
+@media all and ( max-width: 600px) {
+    .header{
+        flex-direction: column;
+    }
+}

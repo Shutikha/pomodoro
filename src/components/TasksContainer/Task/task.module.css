@@ -1,0 +1,85 @@
+.taskItem{
+    font-size: 1.2rem;
+  list-style-type: none;
+  padding: 17px 0px;
+  border-bottom: 1px solid #eaeaea;
+}
+.taskDiv{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: start;
+    align-items: center;
+}
+.checkbox {
+    height: 25px ;
+    margin-right: 10px;
+  }
+  .incompletedTask, .completedTask{
+      flex-grow: 1;
+
+  }
+.completedTask{
+    font-style: "italic";
+    color: "#595959";
+    opacity: 0.4;
+    text-decoration: line-through;
+}
+.textInput{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #dfdfdf;
+    display: block;
+}
+.textInput_dark, .weight_dark{
+    background: transparent;
+    color:lightslategray
+}
+.btn{
+    background:transparent;
+  border: none;
+  cursor: pointer;
+  justify-self: right;
+  outline: none;
+  height: 50px;
+  margin: -10px 0 0 5px;
+}
+.deleteBtn{
+     color: coral;
+    font-size: 20px;
+  
+}
+.editBtn{
+    color: lightseagreen;
+    font-size: 20px;
+}
+.pomodorosContainer{
+    margin: 5px;
+    justify-self: end;
+}
+.pomodoro,.pomodoroUsed{
+    height: 20px;
+}
+.pomodoroUsed{
+    opacity: .5;
+}
+.weightLabel{
+    color: gray;
+    font-size: 1rem;
+}
+.weight{
+
+    width: 30px;
+    margin-left: 4px;
+
+}
+.pomodoroUsedDiv{
+    position: relative;
+    top: -25px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.7);;
+
+}
+.dragHandle{
+    cursor: move;
+}

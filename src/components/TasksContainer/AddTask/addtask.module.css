@@ -1,0 +1,53 @@
+.addTask{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    width: 600px;
+    margin: 20px  auto;
+    padding: 10px;
+
+    border-radius: 10px;
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.38);
+}
+.addTask_dark{
+    box-shadow: 0 1px 6px 0 rgba(255, 255, 255, 0.38);
+}
+.input{
+    outline: none;
+    border: none;
+    font-size: 1rem;
+    font-weight: 400;
+    width: 95%;
+    padding-right: 5px;
+    padding-left: 10px;
+}
+.input_dark, .weight_dark{
+    background: transparent;
+    color:lightslategray
+}
+.btn{
+    outline: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    margin-right: 10px;
+}
+.weight{
+
+    width: 30px;
+    margin-left: 4px;
+
+}
+.weightLabel{
+    color: gray;
+    align-self: center;
+}
+.addPng{
+    color: royalblue;
+    font-size: 20px;
+}
+@media all and ( max-width: 900px) {
+    .addTask{
+        width:90vw ;
+    }
+}

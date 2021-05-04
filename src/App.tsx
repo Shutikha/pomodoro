@@ -1,25 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
+import { Header } from './components/Header';
+import { NotFound } from './components/NotFound';
+import { TasksContainer } from './components/TasksContainer';
+import { TimerSettings } from './components/TimerContainer/TimerSettings';
 
-function App() {
+export const ThemeContext = React.createContext(false);
+
+function App():JSX.Element {
+  const initDarkMode=():boolean=>{
+    const mode =localStorage.getItem('Pomodoro-DarkMode'); 
+    return mode===null?false:('true'===mode);
+  };
+  const handleDarkModeChange=(darkMode:boolean)=>{
+    setDarkMode(darkMode);
+    localStorage.setItem('Pomodoro-DarkMode',JSON.stringify( darkMode));
+  };
+  const [darkMode, setDarkMode] = useState<boolean>(initDarkMode());
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeContext.Provider value={darkMode}>
+      <div className={darkMode? 'App-dark':'App'}>
+        <BrowserRouter> 
+          <Header handleDarkModeChange={handleDarkModeChange}/>
+          <Switch>
+            <Route exact path='/' >
+              <TasksContainer />
+            </Route> 
+            <Route exact path='/timersettings' component={TimerSettings} />
+            <Route exact path='/statistics' component={TimerSettings} />
+            <Route path='*' component={NotFound} />
+          </Switch>
+        </BrowserRouter>
+        <div id = 'modal-root'></div>
+      </div>
+    </ThemeContext.Provider>
   );
 }
 

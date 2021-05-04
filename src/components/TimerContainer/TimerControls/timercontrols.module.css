@@ -1,0 +1,18 @@
+button {
+    outline: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    margin-right: 10px;
+
+}
+button span {
+    display: block;
+}
+button svg{
+    font-size: 40px;
+
+}
+.darkControlBtn{
+    color: var(--orange)
+}

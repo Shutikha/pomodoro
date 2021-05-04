@@ -1,0 +1,20 @@
+.info{
+    margin: 5px auto;
+    color: gray;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    padding: 5px 20px;
+}
+.expand{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+
+}
+.expand svg{
+    font-size: 16px;
+}
+.darkMore {
+    color: lightslategray;
+}
