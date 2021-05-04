@@ -1,0 +1,33 @@
+.addTask{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 400px;
+    margin: 5px auto;
+    padding: 10px;
+
+    border-radius: 10px;
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.38);
+}
+.input{
+    outline: none;
+    border: none;
+    font-size: 1rem;
+    font-weight: 400;
+    width: 85%;
+    padding-right: 5px;
+    padding-left: 10px;
+}
+.addBtn{
+    outline: none;
+    border: none;
+    background: transparent;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 10px;
+}
+@media all and ( max-width: 900px) {
+    .addTask{
+        width:90vw ;
+    }
+}
