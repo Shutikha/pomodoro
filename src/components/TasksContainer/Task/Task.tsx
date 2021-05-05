@@ -15,11 +15,10 @@ export interface ITask{
   handleCompletedChange?: (id:number)=>void,
   handleDeleted?: (id:number)=>void,
   handleTaskChange?:(id:number,newText:string,newWeight:number)=>void,
-  handleEditingStateChange?: (id:number,isEditing:boolean)=>void,
-  isEditing?:boolean
+
 }
-export function Task ({id,text,isCompleted,isEditing=false,pomodoroWeight,pomodoroUsed,handleEditingStateChange=NOOP,handleCompletedChange=NOOP,handleTaskChange=NOOP,handleDeleted=NOOP}:ITask): JSX.Element {
-  const [editing, setEditing] = useState(isEditing);
+export function Task ({id,text,isCompleted,pomodoroWeight,pomodoroUsed,handleCompletedChange=NOOP,handleTaskChange=NOOP,handleDeleted=NOOP}:ITask): JSX.Element {
+  const [editing, setEditing] = useState(false);
   const refImputTaskText = useRef<HTMLTextAreaElement>(null);
   const refImputTaskWeight = useRef<HTMLInputElement>(null);
   const isDarkMode = useContext(ThemeContext);
@@ -38,13 +37,12 @@ export function Task ({id,text,isCompleted,isEditing=false,pomodoroWeight,pomodo
     }
   };
   const handleEditing=(isEditing:boolean)=>{
-    handleEditingStateChange(id,isEditing);
-    //setEditing(isEditing);
+    setEditing(isEditing);
   };
   useEffect(() => {
     textAreaAdjust();
   }, [editing]);
-  
+
   const viewMode = {display:''};
   const editMode = {display:''};
   const inputClasses=classNames(

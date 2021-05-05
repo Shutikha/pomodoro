@@ -5,7 +5,7 @@ import { ThemeContext } from '../../../App';
 import {EColors, Text} from '../../../utils/Text';
 import styles from './timercontrols.module.css';
 
-export enum ETimerState {paused,stopped,running,shortBreak,longBreak}
+export enum ETimerState {paused,stopped,working,shortBreak,longBreak,undefined}
 export interface ITimerControls{
   handleStopTimer:()=>void,
   handleStartTimer:()=>void,
@@ -16,13 +16,14 @@ export interface ITimerControls{
 }
 export function TimerControls({timerState,handleContinueTimer, handleStopTimer,handleStartTimer,handlePauseTimer,handleFastForwardTimer}:ITimerControls):JSX.Element {
   const isDarkMode = useContext(ThemeContext);
+
   return (
     <div className={styles.controls} >
       { timerState===ETimerState.stopped && <button onClick={handleStartTimer} ><FaPlay className={isDarkMode?styles.darkControlBtn:''}/><Text size={10} color={isDarkMode?EColors.orange:EColors.grey}>Старт</Text></button>}
       { timerState===ETimerState.paused && <button onClick={handleContinueTimer} ><FaPlay className={isDarkMode?styles.darkControlBtn:''}/><Text size={10} color={isDarkMode?EColors.orange:EColors.grey}>Продолжить</Text></button>}
       {(timerState!==ETimerState.paused && timerState!==ETimerState.stopped) && <button onClick={handleStopTimer} ><FaStop className={isDarkMode?styles.darkControlBtn:''}/><Text size={10} color={isDarkMode?EColors.orange:EColors.grey}>Стоп</Text></button>}
       {(timerState!==ETimerState.paused && timerState!==ETimerState.stopped) && <button onClick={handlePauseTimer} ><FaPause className={isDarkMode?styles.darkControlBtn:''}/><Text size={10} color={isDarkMode?EColors.orange:EColors.grey}>Пауза</Text></button>}
-      {(timerState===ETimerState.shortBreak ||ETimerState.longBreak ||timerState===ETimerState.paused || timerState===ETimerState.running) && <button onClick={handleFastForwardTimer} ><MdFastForward className={isDarkMode?styles.darkControlBtn:''}/><Text size={10} color={isDarkMode?EColors.orange:EColors.grey}>Пропустить</Text></button>}
+      {(timerState===ETimerState.shortBreak ||ETimerState.longBreak ||timerState===ETimerState.paused || timerState===ETimerState.working) && <button onClick={handleFastForwardTimer} ><MdFastForward className={isDarkMode?styles.darkControlBtn:''}/><Text size={10} color={isDarkMode?EColors.orange:EColors.grey}>Пропустить</Text></button>}
     </div>
   );
 }
