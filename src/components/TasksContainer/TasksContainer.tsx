@@ -17,7 +17,7 @@ export interface IState{
   timerState:ETimerState,
   continueState:ETimerState,
   timerCountdown:number,
-  loadedFromStorage?:boolean  
+  loadedFromStorage?:boolean
 
 }
 
@@ -33,9 +33,9 @@ export function TasksContainer(): JSX.Element {
     {
       //if autoStopTimer =true, we start only if we have active tasks
       if(timerSettings.autoStopTimer && !tasks.find (x=>!x.isCompleted && x.pomodoroUsed<x.pomodoroWeight) ){
- 
+
         //no more active tasks
-        setTimerStarted(false);//stop timer           
+        setTimerStarted(false);//stop timer
         setState({
           ...state,
           timerState:ETimerState.stopped,
@@ -45,17 +45,17 @@ export function TasksContainer(): JSX.Element {
       }
       const timerStep=timerSettings.developerMode?60:1;
       const intervalHandle=setInterval(()=>{
-        setState((prevState)=>{ 
+        setState((prevState)=>{
           if(prevState.timerCountdown<=0)
           {
             setTimerStarted(false);
-          } 
+          }
           return {...prevState, timerCountdown: Math.max(0, prevState.timerCountdown-timerStep)};
         });
 
 
       },1000);
-    
+
 
       return () => {
         clearInterval(intervalHandle);
@@ -64,7 +64,7 @@ export function TasksContainer(): JSX.Element {
     else {
 
       //timer is ended so it's time to change state
-      
+
       if(state.timerState===ETimerState.running){
         console.log('short break or long break');
         //short break or long break
@@ -98,7 +98,7 @@ export function TasksContainer(): JSX.Element {
           timerState:ETimerState.running,
           continueState:ETimerState.running,
           timerCountdown: timerSettings.pomodoroDuration*60 });
-        setTimerStarted(true);//start timer 
+        setTimerStarted(true);//start timer
       }
       else if(state.timerState===ETimerState.longBreak){
         console.log('start from the first pomodoro');
@@ -108,11 +108,11 @@ export function TasksContainer(): JSX.Element {
           timerState:ETimerState.running,
           continueState:ETimerState.running,
           timerCountdown: timerSettings.pomodoroDuration*60 });
-        setTimerStarted(true);//start timer 
+        setTimerStarted(true);//start timer
       }
       // reset this flag in case we have set it before
       setSkipThisPomodoro(false);
-      
+
     }
   }, [timerStarted]);
   const SortableList = SortableContainer(TasksList);
@@ -137,9 +137,9 @@ export function TasksContainer(): JSX.Element {
     };
   }, []);
 
- 
+
   function getInitialTasks():ITask[] {
-    const savedTasks =localStorage.getItem('Pomodoro-Tasks'); 
+    const savedTasks =localStorage.getItem('Pomodoro-Tasks');
     return savedTasks? JSON.parse(savedTasks) : [];
   }
   function initState():IState{
@@ -149,8 +149,8 @@ export function TasksContainer(): JSX.Element {
       return {
         currentPomodoro:0,
         timerState:ETimerState.stopped,
-        continueState:ETimerState.running, 
-        timerCountdown:26*60,
+        continueState:ETimerState.running,
+        timerCountdown:25*60,
       };
     }
     const x=JSON.parse(state) as IState;
@@ -188,7 +188,7 @@ export function TasksContainer(): JSX.Element {
     case ETimerState.longBreak:
     default:
       return 0;
-    }   
+    }
   };
   const handleAddTask = (text:string,pomodoroWeight:number) => {
     const newTask:ITask = {
@@ -224,17 +224,17 @@ export function TasksContainer(): JSX.Element {
     );
   };
   const handleEditingStateChange= (id:number,isEditing:boolean)=>{
-  
+
     if(state.timerState===ETimerState.running ||state.timerState===ETimerState.shortBreak|| state.timerState===ETimerState.longBreak)
     {
-      //if we have running timer, pause it 
+      //if we have running timer, pause it
       if(isEditing){
         handlePauseTimer();
       }
 
     }
     else if(state.timerState===ETimerState.paused && !isEditing){
-      //when editing is done, continue timer 
+      //when editing is done, continue timer
       handleContinueTimer();
     }
     setEditingTaskId(isEditing?id:0);
@@ -247,7 +247,7 @@ export function TasksContainer(): JSX.Element {
 
     setState({currentPomodoro: 1, timerCountdown: timerSettings.pomodoroDuration*60 , timerState: ETimerState.running, continueState: ETimerState.running });
     setTimerStarted(true);
-  
+
   };
   const handleStopTimer =()=>{
     setState({...state, timerState: ETimerState.stopped });
@@ -275,30 +275,30 @@ export function TasksContainer(): JSX.Element {
     setTasks(arrayMove(tasks, e.oldIndex, e.newIndex ));
   //  handleContinueTimer();
   };
- 
+
   return (
     <>
       <div className={styles.tasksContainer}>
         <Info/>
         <AddTask handleAddTask={handleAddTask}/>
-        <SortableList 
-          tasks={tasks} 
+        <SortableList
+          tasks={tasks}
           editingTaskId={editingTaskId}
-          handleCompletedChange={handleCompletedChange} 
-          handleTaskChange={handleTaskChange} 
+          handleCompletedChange={handleCompletedChange}
+          handleTaskChange={handleTaskChange}
           handleEditingStateChange={handleEditingStateChange}
-          handleDeleted={handleDeleted} 
-          onSortEnd={onSortEnd} 
-          distance={5} 
+          handleDeleted={handleDeleted}
+          onSortEnd={onSortEnd}
+          distance={5}
           onSortStart={onSortStart }
 
 
         />
       </div>
-      <TimerContainer 
-        handleStopTimer={handleStopTimer} 
-        handleStartTimer={handleStartTimer} 
-        handlePauseTimer={handlePauseTimer} 
+      <TimerContainer
+        handleStopTimer={handleStopTimer}
+        handleStartTimer={handleStartTimer}
+        handlePauseTimer={handlePauseTimer}
         handleContinueTimer={handleContinueTimer}
         handleFastForwardTimer={handleFastForwardTimer}
         currentPomodoro={getCurrentStateDescription()}

@@ -6,12 +6,17 @@
     align-items: center;
     margin: 5px auto;
 }
+.title{
+        display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 .logo{
     margin: 0 20px 0 10px ;
     width: 80px;
 }
 .navs{
-    justify-self: end;   
+    justify-self: end;
      display: flex;
     flex-direction: row;
     align-items: baseline;

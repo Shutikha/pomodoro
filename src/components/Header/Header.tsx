@@ -20,17 +20,19 @@ export function Header({handleDarkModeChange}:IHeader): JSX.Element {
 
   return (
     <div className={styles.header}>
-      <NavLink to='/' exact>
+      <div className={styles.title}>
+        <NavLink to='/' exact>
 
-        <img className={styles.logo} src={logo} alt='logo'/>
+          <img className={styles.logo} src={logo} alt='logo'/>
 
-      </NavLink>
-      <NavLink to='/' exact>
+        </NavLink>
+        <NavLink to='/' exact>
 
-        <Text size={28} color={isDarkMode?EColors.orange:EColors.black} >Pomodoro</Text>
+          <Text size={28} color={isDarkMode?EColors.orange:EColors.black} >Pomodoro</Text>
 
-      </NavLink>
-      
+        </NavLink>
+      </div>
+
       <div className={styles.navs}>
 
         <NavLink className={navClasses} to="/statistics" exact >Статистика</NavLink>
@@ -38,7 +40,7 @@ export function Header({handleDarkModeChange}:IHeader): JSX.Element {
         <div className={styles.theme}>
 
           <Switch height={20} handleDiameter={18} onChange={(val)=>handleDarkModeChange(val)} checked={isDarkMode} />
-          <Text size={16} color={isDarkMode?EColors.orange:EColors.black}>темная тема</Text> 
+          <Text size={16} color={isDarkMode?EColors.orange:EColors.black}>темная тема</Text>
 
 
         </div>
