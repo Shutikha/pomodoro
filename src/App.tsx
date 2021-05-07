@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 import { Header } from './components/Header';
 import { NotFound } from './components/NotFound';
+import { Statistics } from './components/Statistics';
 import { TasksContainer } from './components/TasksContainer';
 import { TimerSettings } from './components/TimerContainer/TimerSettings';
 
@@ -28,7 +29,7 @@ function App():JSX.Element {
               <TasksContainer />
             </Route> 
             <Route exact path='/timersettings' component={TimerSettings} />
-            <Route exact path='/statistics' component={TimerSettings} />
+            <Route exact path='/statistics' component={Statistics} />
             <Route path='*' component={NotFound} />
           </Switch>
         </BrowserRouter>

@@ -24,6 +24,7 @@ export const TimerContainer = ({ pomodoroDone, isAnyWork}:ITimerContainer): JSX.
   const [timerSettings, setTimerSettings] = useState<ITimerSettings>({ developerMode: false, longBreakDuration: 25, shortBreakDuration: 5, pomodoroDuration: 25, showNotifications: false, autoStopTimer: true, pomodorosBeforLonBreak: 4 });
   const [timer, setTimer] = useState<ITimer>(initTimer());
   const [timerStarted, setTimerStarted] = useState(false);
+  const [pauseTime, setPauseTime] = useState<number|null>(null);
 
   const [skipThisPomodoro, setSkipThisPomodoro] = useState<boolean>(false);
 
@@ -66,10 +67,12 @@ export const TimerContainer = ({ pomodoroDone, isAnyWork}:ITimerContainer): JSX.
   const handleStopTimer = () => {
     setTimer({ ...timer, timerState: ETimerState.stopped });
     setTimerStarted(false);
+    saveStatToLocalStorage('Pomodoro-StatisticsStops',1);
   };
   const handlePauseTimer = () => {
     setTimer({ ...timer, timerState: ETimerState.paused, continueState: timer.timerState });
     setTimerStarted(false);
+    setPauseTime((new Date()).getTime());
   };
   const handleFastForwardTimer = () => {
     setSkipThisPomodoro(true);
@@ -79,8 +82,30 @@ export const TimerContainer = ({ pomodoroDone, isAnyWork}:ITimerContainer): JSX.
   const handleContinueTimer = () => {
     setTimer({ ...timer, timerState: timer.continueState, continueState: ETimerState.undefined });
     setTimerStarted(true);
+    if(pauseTime){
+      saveStatToLocalStorage('Pomodoro-StatisticsPauseMillisecs',(new Date()).getTime() - pauseTime);
+    }
+    setPauseTime(null);
   };
 
+  function saveStatToLocalStorage(stat:string,val:number) {
+    const date=(new Date()).toDateString();
+    const saved_stat=localStorage.getItem(stat);
+     
+    if( saved_stat ){
+      const arr= new Map(JSON.parse(saved_stat));
+      if (arr.has(date)){
+         
+        arr.set(date,val + Number(arr.get(date)));
+        localStorage.setItem(stat, JSON.stringify([...arr]));
+        return;
+      }
+      
+    }
+    
+    localStorage.setItem(stat, JSON.stringify([...new Map([[date,val]])]));
+  
+  }
 
   //load timer setting on first page load
   useEffect(() => {
@@ -187,3 +212,4 @@ export const TimerContainer = ({ pomodoroDone, isAnyWork}:ITimerContainer): JSX.
     </div>
   );
 };
+

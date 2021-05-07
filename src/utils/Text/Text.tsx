@@ -9,6 +9,7 @@ export enum EColors {
   green = 'green',
   white = 'white',
   grey = 'grey',
+  lightseagreen='lightseagreen'
 
 }
 interface ITextProps{

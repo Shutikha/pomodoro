@@ -1,0 +1,52 @@
+.page{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.header{
+    margin: auto;
+}
+.page_dark{
+    background-color: #282c34;
+    color: lightslategray;
+}
+.tabsContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly ;
+    margin-top: 10px  ;
+    margin-bottom: 20px  ;
+}
+.tab{
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    font-weight: bold;
+    cursor: pointer;
+
+}
+.activeTab{
+    border-bottom: 3px solid var(--orange) ;
+    cursor: default;
+    margin-top: 3px;
+}
+.calendar{
+    width:auto;
+}
+.calendar_dark{
+    background-color: #282c34;
+    color: lightslategray;
+}
+.chartsBody{
+    margin: 10px auto 10px 30px;
+    justify-self: start; 
+}
+.calendarContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.WorkByMonthChart {
+    width: 900;
+}
