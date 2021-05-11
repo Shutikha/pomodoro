@@ -12,7 +12,7 @@ export function Info():JSX.Element {
       {isCollapsed && <div className={styles.expand}><button onClick={()=>setIsCollapsed(!isCollapsed)}><MdExpandMore className={isDarkMode?styles.darkMore:''}/></button></div>}
       {!isCollapsed &&
       <div>
-        <ul>
+        <ul className={styles.instruction}>
           <li>Запланируйте несколько задач на свой день и для каждой задайте примерное количество «помидоров», которое необходимо, чтобы её сделать</li>
           <li>Задачи можно перетаскивать мышкой, верхняя задача из списка — это текущая задача</li>
           <li>Запустите таймер. Каждую «помидорка» длится 25 мин, между ними перерыв 5 мин. После четырех «помидорок» длинный перерыв 25 мин. Интервалы можно изменить в настройках </li>

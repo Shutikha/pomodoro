@@ -1,18 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Bar } from 'react-chartjs-2';
+import { ThemeContext } from '../../../App';
+import { EColors,Text } from '../../../utils/Text';
+import { getDaysForWeekChart, getMondayOfSelectedWeek, getSundayOfSelectedWeek, getWorkHours } from '../stat_utils';
 
-import styles from './verticalbarchart.module.css';
 interface IVerticalBarChart{
-  period: Date
+  date: Date
 }
-export function VerticalBarChart({period}:IVerticalBarChart) {
+export function VerticalBarChart({date}:IVerticalBarChart):JSX.Element {
+  const isDarkMode = useContext(ThemeContext);
 
   const data = {
-    labels: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб','Вс'],
+    labels: getDaysForWeekChart(date).map(day=>day.toLocaleDateString('ru-RU',{day:'numeric',weekday: 'short' })),
+    //labels: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб','Вс'],
     datasets: [
       {
         label: 'количество часов в день',
-        data: [...Array(7)].map(()=>Math.random()*20),
+        data: getWorkHours(date,true),
         backgroundColor: 
           'rgba(75, 192, 192, 0.2)',
         
@@ -28,8 +32,8 @@ export function VerticalBarChart({period}:IVerticalBarChart) {
 
     legend: {
       labels: {
-        filter: function(item:any, chart:any) {
-          // Logic to remove a particular legend item goes here
+        filter: function(item:any) {
+
           return !item.text.includes('часов в день');
         }
       }
@@ -46,6 +50,9 @@ export function VerticalBarChart({period}:IVerticalBarChart) {
     },
   };
   return (
-    <Bar type={'bar'} data={data} options={options} />
+    <div>
+      <Text size={28} color={isDarkMode?EColors.grey:EColors.black}>Работа с таймером за неделю с {getMondayOfSelectedWeek(date).toLocaleDateString('ru-RU')} по {getSundayOfSelectedWeek(date).toLocaleDateString('ru-RU')} </Text>
+      <Bar type={'bar'} data={data} options={options} />
+    </div>
   );
 }

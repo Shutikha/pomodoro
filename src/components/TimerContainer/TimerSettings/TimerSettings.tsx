@@ -25,7 +25,7 @@ export function TimerSettings():JSX.Element|null {
   const [shortBreakDuration, setShortBreakDuration] = useState<number>(Number(init('shortBreakDuration')||5));
   const [longBreakDuration, setLongBreakDuration] = useState<number>(Number(init('longBreakDuration')||25));
   const [pomodorosBeforLonBreak, setPomodorosBeforLonBreak] = useState<number>(Number(init('pomodorosBeforLonBreak')||4));
-  const [showNotifications, setShowNotifications] = useState<boolean>('true'===init('showNotifications')||false);
+  //const [showNotifications, setShowNotifications] = useState<boolean>('true'===init('showNotifications')||false);
   const [autoStopTimer, setAutoStopTimer] = useState<boolean>(null===init('autoStopTimer')?true:'true'===init('autoStopTimer'));
   const [developerMode, setDeveloperMode] = useState<boolean>('true'===init('developerMode'));
   const ref = useRef<HTMLDivElement>(null);
@@ -52,7 +52,7 @@ export function TimerSettings():JSX.Element|null {
     e.preventDefault();
     saveSettings('pomodoroDuration',pomodoroDuration);
     saveSettings('shortBreakDuration',shortBreakDuration);
-    saveSettings('showNotifications',showNotifications);
+    //saveSettings('showNotifications',showNotifications);
     saveSettings('longBreakDuration',longBreakDuration);
     saveSettings('pomodorosBeforLonBreak',pomodorosBeforLonBreak);
     saveSettings('autoStopTimer',autoStopTimer);

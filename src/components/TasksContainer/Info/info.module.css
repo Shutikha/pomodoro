@@ -18,3 +18,16 @@
 .darkMore {
     color: lightslategray;
 }
+.instruction{
+    list-style: none;
+}
+.instruction > li{
+    padding-left: 20px;
+    position: relative;
+    margin: 10px;
+}
+.instruction>li:before{
+    content: '✔';
+    position: absolute; top: 0; left: 0;
+    color: lightseagreen;
+}

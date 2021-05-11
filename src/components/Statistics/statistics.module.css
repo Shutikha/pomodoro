@@ -5,7 +5,9 @@
 }
 .header{
     margin: auto;
+    vertical-align: text-bottom;
 }
+
 .page_dark{
     background-color: #282c34;
     color: lightslategray;
@@ -32,21 +34,44 @@
 }
 .calendar{
     width:auto;
+    margin-left: 1rem;
+    font-size: 1rem;
 }
-.calendar_dark{
+.calendar_dark {
     background-color: #282c34;
     color: lightslategray;
 }
+
+.calendarBtn {
+    font-size: 28px;
+    vertical-align: middle ;
+}
+.calendarBtn_dark  {
+    color: lightslategray;
+    font-size: 28px;
+    vertical-align: middle ;
+}
+
 .chartsBody{
     margin: 10px auto 10px 30px;
-    justify-self: start; 
-}
-.calendarContainer{
     display: flex;
     flex-direction: row;
-    align-items: center;
-    margin-bottom: 10px;
+    flex-wrap: wrap;
+
 }
-.WorkByMonthChart {
-    width: 900;
+.statContainer{
+    width: 40vw;margin: 20px;
+    border-radius: 10px;
+    border: 1px solid gray;
+    padding: 20px;
+}
+@media all and ( max-width: 600px) {
+    .chartsBody{
+        flex-direction: column;
+        align-items: center;
+        margin:auto
+    }
+    .statContainer{
+        width: 85vw;
+    }
 }

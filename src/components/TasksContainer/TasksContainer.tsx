@@ -64,7 +64,7 @@ export function TasksContainer(): JSX.Element {
   };
 
 
-  function onSortStart(_: any, event:SortEvent){
+  function onSortStart(_: unknown, event:SortEvent){
     event.preventDefault();
   //  handlePauseTimer();
   }

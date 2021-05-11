@@ -12,6 +12,7 @@ export interface ITimer {
   continueState: ETimerState,
   countdown: number,
   currentPomodoro: number,
+  date?:string,
 
 }
 interface ITimerContainer{
@@ -25,22 +26,26 @@ export const TimerContainer = ({ pomodoroDone, isAnyWork}:ITimerContainer): JSX.
   const [timer, setTimer] = useState<ITimer>(initTimer());
   const [timerStarted, setTimerStarted] = useState(false);
   const [pauseTime, setPauseTime] = useState<number|null>(null);
+  // const [startTime, setStartTime] = useState<number|null>(null);
 
   const [skipThisPomodoro, setSkipThisPomodoro] = useState<boolean>(false);
 
   function initTimer(): ITimer {
     const state = localStorage.getItem('Pomodoro-state');
-    if (state === null) {
-
-      return {
-        currentPomodoro: 0,
-        timerState: ETimerState.stopped,
-        continueState: ETimerState.undefined,
-        countdown: timerSettings.pomodoroDuration * 60,
-      };
+    if (state) {
+      const loaded_state= JSON.parse(state) as ITimer ;
+      if(loaded_state.date && loaded_state.date===(new Date()).toDateString()){
+        return loaded_state;
+      }
     }
+    return {
+      currentPomodoro: 0,
+      timerState: ETimerState.stopped,
+      continueState: ETimerState.undefined,
+      countdown: timerSettings.pomodoroDuration * 60,
 
-    return JSON.parse(state) as ITimer ;
+    };
+    
   }
   const getCurrentStateDescription = () => {
     switch (timer.timerState) {
@@ -61,13 +66,18 @@ export const TimerContainer = ({ pomodoroDone, isAnyWork}:ITimerContainer): JSX.
   };
   const handleStartTimer = () => {
 
-    setTimer({ currentPomodoro: 1, countdown: timerSettings.pomodoroDuration * 60, timerState: ETimerState.working, continueState: ETimerState.undefined });
+    setTimer({...timer,currentPomodoroDescription:'', currentPomodoro: 1, countdown: timerSettings.pomodoroDuration * 60, timerState: ETimerState.working, continueState: ETimerState.undefined });
     setTimerStarted(true);
+    //setStartTime((new Date()).getTime());
   };
   const handleStopTimer = () => {
     setTimer({ ...timer, timerState: ETimerState.stopped });
     setTimerStarted(false);
     saveStatToLocalStorage('Pomodoro-StatisticsStops',1);
+    // if(startTime){
+    //   saveStatToLocalStorage('Pomodoro-StatisticsWorkMillisecs',(new Date()).getTime()-startTime);
+    // }
+    //setStartTime(null);
   };
   const handlePauseTimer = () => {
     setTimer({ ...timer, timerState: ETimerState.paused, continueState: timer.timerState });
@@ -86,6 +96,7 @@ export const TimerContainer = ({ pomodoroDone, isAnyWork}:ITimerContainer): JSX.
       saveStatToLocalStorage('Pomodoro-StatisticsPauseMillisecs',(new Date()).getTime() - pauseTime);
     }
     setPauseTime(null);
+    // setStartTime((new Date()).getTime());
   };
 
   function saveStatToLocalStorage(stat:string,val:number) {
@@ -145,8 +156,10 @@ export const TimerContainer = ({ pomodoroDone, isAnyWork}:ITimerContainer): JSX.
           if (prevState.countdown <= 0) {
             setTimerStarted(false);//this will stop timer
           }
-          localStorage.setItem('Pomodoro-state', JSON.stringify({ ...prevState, timerState: ETimerState.paused, continueState: prevState.timerState, countdown: Math.max(0, prevState.countdown - timerStep)}));
-          return { ...prevState, countdown: Math.max(0, prevState.countdown - timerStep) };
+          const new_state={ ...prevState, date:(new Date()).toDateString(), currentPomodoroDescription:'', countdown: Math.max(0, prevState.countdown - timerStep)};
+          localStorage.setItem('Pomodoro-state', JSON.stringify({...new_state,timerState: ETimerState.paused, continueState: prevState.timerState}));
+          saveStatToLocalStorage('Pomodoro-StatisticsWorkMillisecs',1000*timerStep);
+          return new_state;
         });
 
       }, 1000);
@@ -166,6 +179,7 @@ export const TimerContainer = ({ pomodoroDone, isAnyWork}:ITimerContainer): JSX.
         //short break or long break
         const isLongBreak = timer.currentPomodoro + 1 > timerSettings.pomodorosBeforLonBreak;
         setTimer({
+          ... timer,
           currentPomodoro: timer.currentPomodoro,
           timerState: isLongBreak ? ETimerState.longBreak : ETimerState.shortBreak,
           continueState: ETimerState.working,
@@ -181,6 +195,7 @@ export const TimerContainer = ({ pomodoroDone, isAnyWork}:ITimerContainer): JSX.
         //console.log('begin next pomodoro');
         //begin next pomodoro
         setTimer({
+          ... timer,
           currentPomodoro: timer.currentPomodoro + 1,
           timerState: ETimerState.working,
           continueState: ETimerState.working,
@@ -192,6 +207,7 @@ export const TimerContainer = ({ pomodoroDone, isAnyWork}:ITimerContainer): JSX.
         //console.log('start from the first pomodoro');
         //start from the first pomodoro
         setTimer({
+          ... timer,
           currentPomodoro: 1,
           timerState: ETimerState.working,
           continueState: ETimerState.working,

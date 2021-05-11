@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { ThemeContext } from '../../App';
 import styles from './statistics.module.css';
 import {EColors, Text} from '../../utils/Text';
@@ -10,19 +10,16 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { Stops } from './Stops';
 import { Pause } from './Pause';
 import { Focus } from './Focus';
+import { FaRegCalendarAlt } from 'react-icons/fa';
+import ReactDatePicker from 'react-datepicker';
 
-enum Charts{
-  WorkByMonth,
-  Focus,
-  PauseTime,
-  Stops
-}
+
 export function Statistics():JSX.Element {
 
   registerLocale('ru', ru);
   const isDarkMode = useContext(ThemeContext);
   const [statDate, setStatDate] = useState(new Date());
-  const [activeChart, setActiveChart] = useState<Charts>(Charts.WorkByMonth);
+  const calendarRef = useRef<ReactDatePicker>(null);
   const pageClasses=classNames(
     styles.page,
     isDarkMode?styles.page_dark:''
@@ -31,93 +28,66 @@ export function Statistics():JSX.Element {
     styles.calendar,
     isDarkMode?styles.calendar_dark:''
   );
-  function handleChartSelect(chart: Charts): void {
-    setActiveChart(chart);
-  }
+
   function hanldeStatDateChange(date: Date | [Date, Date] | null): void {
     if(date instanceof Date )
       setStatDate(date);
   }
-  const getFirstDayOfSelectedWeek=()=>{
-    const result = new Date(statDate);
-    result.setDate(result.getDate() - statDate.getDay());
-    return result.toLocaleDateString('ru-RU');
 
+  const openCalendar=()=>{
+    if(calendarRef.current){
+      calendarRef.current.setOpen(true);
+    }
   };
-  
-  const getLastDayOfSelectedWeek=()=>{
-    const result = new Date(statDate);
-    result.setDate(result.getDate() + 6- statDate.getDay());
-    return result.toLocaleDateString('ru-RU');
-  };
-
   return (
     <div className={pageClasses}>
       <div className={styles.header}>
-        <Text As='h1' size={28} color={isDarkMode?EColors.grey:EColors.black} >Статистика</Text>
-
-      </div>
-      <div className={styles.tabsContainer}>
-        <div className={styles.tab} onClick={()=>handleChartSelect(Charts.WorkByMonth)} >
-          <div className={ activeChart===Charts.WorkByMonth?styles.activeTab:''}>
-            <Text size={20} color={isDarkMode?EColors.grey:EColors.black}>Время работы с таймером </Text>
-          </div>
-        </div>
-        <div className={styles.tab} onClick={()=>handleChartSelect(Charts.Focus)} >
-          <div className={ activeChart===Charts.Focus?styles.activeTab:''}>
-            <Text size={20} color={isDarkMode?EColors.grey:EColors.black} >Фокус</Text>
-          </div>
-        </div>
-        <div className={styles.tab} onClick={()=>handleChartSelect(Charts.PauseTime)} >
-          <div className={ activeChart===Charts.PauseTime?styles.activeTab:''}>
-            <Text size={20} color={isDarkMode?EColors.grey:EColors.black} >Время на паузе</Text>
-          </div>
-        </div>
-        <div className={styles.tab} onClick={()=>handleChartSelect(Charts.Stops)} >
-          <div className={ activeChart===Charts.Stops?styles.activeTab:''}>
-            <Text size={20} color={isDarkMode?EColors.grey:EColors.black} >Остановки</Text>
-          </div>
-        </div>
-      </div>
-      <div className={styles.chartsBody}>
-        <div className={styles.calendarContainer}>
-          <label htmlFor='calendar' > <Text size={18} color={isDarkMode?EColors.grey:EColors.black} >Выберите дату:</Text></label>
+        <Text As='h1' size={28} color={isDarkMode?EColors.grey:EColors.black} >
+          Статистика за          
           <DatePicker className={calendarClasses}
             locale="ru"
+            todayButton="Сегодня"
             selected={statDate}
             onChange={(date)=> hanldeStatDateChange(date) }
             dateFormat="dd MMMM yyyy"
             maxDate={new Date()}
             name='calendar'
+            ref={calendarRef}
 
           />
+          <button onClick={()=>openCalendar()} ><FaRegCalendarAlt className={isDarkMode? styles.calendarBtn_dark:styles.calendarBtn}/></button>
+        </Text>
+
+      </div>
+
+      <div className={styles.chartsBody}>
+
+
+        <div className={styles.statContainer} >
+
+          <VerticalBarChart date={statDate} />
         </div>
-        { 
-          activeChart===Charts.WorkByMonth && 
-          <div className={styles.WorkByMonthChart}>
 
-            <Text size={14} color={isDarkMode?EColors.grey:EColors.black}>Статистика за неделю с {getFirstDayOfSelectedWeek()} по {getLastDayOfSelectedWeek()} </Text>
-            <VerticalBarChart period={statDate} />
-          </div>
-        }
-        { 
-          activeChart===Charts.Focus && 
+        <div className={styles.statContainer}>
+          <Focus date={statDate}/>
+          
+        </div>
+        <div className={styles.statContainer}>
+          <Pause date={statDate} />
 
-            <Focus />
+        </div>
+        <div className={styles.statContainer}>
+          <Stops date={statDate} />
 
-        }
-        { 
-          activeChart===Charts.PauseTime && 
+        </div>
 
-            <Pause date={statDate} />
 
-        }
-        { 
-          activeChart===Charts.Stops && 
 
-            <Stops date={statDate} />
 
-        }
+
+
+
+        
       </div>
     </div>
   );

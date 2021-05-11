@@ -1,6 +1,7 @@
 import React from 'react';
 import { SortableElement } from 'react-sortable-hoc';
 import { ITask, Task } from '../Task/Task';
+import styles from './taskslist.module.css';
 
 import './taskslist.module.css';
 export interface ITasks{
@@ -17,7 +18,7 @@ export function TasksList({tasks,handleCompletedChange,handleDeleted,handleTaskC
 
   return (
 
-    <ul>
+    <ul className={styles.tasklist}>
       {tasks.map((task,index) => (
 
 

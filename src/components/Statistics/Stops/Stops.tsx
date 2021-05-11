@@ -8,7 +8,7 @@ interface IStops{
 }
 export function Stops({date}:IStops):JSX.Element {
   const isDarkMode = useContext(ThemeContext);
-  const getStops=():any=>{
+  const getStops=():unknown=>{
     const saved_stops=localStorage.getItem('Pomodoro-StatisticsStops');
     if( saved_stops ){
 
@@ -24,8 +24,8 @@ export function Stops({date}:IStops):JSX.Element {
 
   return (
     <div className={styles.stops}>
-      <Text size={18} color={isDarkMode?EColors.grey:EColors.black} >Остановки за {date.toLocaleDateString('ru')} -&gt; </Text>
-      <Text size={36} color={isDarkMode?EColors.lightseagreen:EColors.orange} > {getStops()}</Text>
+      <Text size={28} color={isDarkMode?EColors.grey:EColors.black} >Остановки : </Text>
+      <Text size={28} color={isDarkMode?EColors.lightseagreen:EColors.orange} > {getStops()}</Text>
     </div>
   );
 }
