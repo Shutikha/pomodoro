@@ -43,19 +43,21 @@ export function Statistics():JSX.Element {
     <div className={pageClasses}>
       <div className={styles.header}>
         <Text As='h1' size={28} color={isDarkMode?EColors.grey:EColors.black} >
-          Статистика за          
-          <DatePicker className={calendarClasses}
-            locale="ru"
-            todayButton="Сегодня"
-            selected={statDate}
-            onChange={(date)=> hanldeStatDateChange(date) }
-            dateFormat="dd MMMM yyyy"
-            maxDate={new Date()}
-            name='calendar'
-            ref={calendarRef}
+          Статистика за
+          <div className={styles.datepicker}>
+            <DatePicker className={calendarClasses}
+              locale="ru"
+              todayButton="Сегодня"
+              selected={statDate}
+              onChange={(date)=> hanldeStatDateChange(date) }
+              dateFormat="dd MMMM yyyy"
+              maxDate={new Date()}
+              name='calendar'
+              ref={calendarRef}
 
-          />
-          <button onClick={()=>openCalendar()} ><FaRegCalendarAlt className={isDarkMode? styles.calendarBtn_dark:styles.calendarBtn}/></button>
+            />
+            <button onClick={()=>openCalendar()} ><FaRegCalendarAlt className={isDarkMode? styles.calendarBtn_dark:styles.calendarBtn}/></button>
+          </div>
         </Text>
 
       </div>
@@ -70,7 +72,7 @@ export function Statistics():JSX.Element {
 
         <div className={styles.statContainer}>
           <Focus date={statDate}/>
-          
+
         </div>
         <div className={styles.statContainer}>
           <Pause date={statDate} />
@@ -87,7 +89,7 @@ export function Statistics():JSX.Element {
 
 
 
-        
+
       </div>
     </div>
   );

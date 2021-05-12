@@ -32,6 +32,11 @@
     cursor: default;
     margin-top: 3px;
 }
+.datepicker{
+    display: inline-flex;
+    flex-direction: row;
+
+}
 .calendar{
     width:auto;
     margin-left: 1rem;
