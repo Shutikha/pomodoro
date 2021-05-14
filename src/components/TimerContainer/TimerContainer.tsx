@@ -17,10 +17,10 @@ export interface ITimer {
 }
 interface ITimerContainer{
   pomodoroDone:()=>void,
-  isAnyWork: ()=>boolean,
+  getNumberOfPomodorosToDo: ()=>number,
 
 }
-export const TimerContainer = ({ pomodoroDone, isAnyWork}:ITimerContainer): JSX.Element => {
+export const TimerContainer = ({ pomodoroDone, getNumberOfPomodorosToDo}:ITimerContainer): JSX.Element => {
 
   const [timerSettings, setTimerSettings] = useState<ITimerSettings>({ developerMode: false, longBreakDuration: 25, shortBreakDuration: 5, pomodoroDuration: 25, showNotifications: false, autoStopTimer: true, pomodorosBeforLonBreak: 4 });
   const [timer, setTimer] = useState<ITimer>(initTimer());
@@ -45,7 +45,7 @@ export const TimerContainer = ({ pomodoroDone, isAnyWork}:ITimerContainer): JSX.
       countdown: timerSettings.pomodoroDuration * 60,
 
     };
-    
+
   }
   const getCurrentStateDescription = () => {
     switch (timer.timerState) {
@@ -102,20 +102,35 @@ export const TimerContainer = ({ pomodoroDone, isAnyWork}:ITimerContainer): JSX.
   function saveStatToLocalStorage(stat:string,val:number) {
     const date=(new Date()).toDateString();
     const saved_stat=localStorage.getItem(stat);
-     
+
     if( saved_stat ){
       const arr= new Map(JSON.parse(saved_stat));
       if (arr.has(date)){
-         
+
         arr.set(date,val + Number(arr.get(date)));
         localStorage.setItem(stat, JSON.stringify([...arr]));
         return;
       }
-      
+
     }
-    
+
     localStorage.setItem(stat, JSON.stringify([...new Map([[date,val]])]));
-  
+
+  }
+  function calculatePomodorosLeft(): number {
+    const x= Math.max(0, Math.min(timerSettings.pomodorosBeforLonBreak - timer.currentPomodoro + 1, getNumberOfPomodorosToDo()));
+    if(x===0 && timerStarted)
+    {
+      //no more active tasks
+      setTimerStarted(false);
+      setTimer({
+        ...timer,
+        timerState: ETimerState.stopped,
+        currentPomodoroDescription: 'нет активных задач'
+      });
+    }
+    return x;
+
   }
 
   //load timer setting on first page load
@@ -136,7 +151,7 @@ export const TimerContainer = ({ pomodoroDone, isAnyWork}:ITimerContainer): JSX.
   useEffect(() => {
     if (timerStarted) {
       //if autoStopTimer =true, we start only if we have active tasks
-      if (timerSettings.autoStopTimer && !isAnyWork() ) {
+      if (timerSettings.autoStopTimer && getNumberOfPomodorosToDo()===0 ) {
 
         //no more active tasks
         setTimerStarted(false);//stop timer
@@ -222,10 +237,12 @@ export const TimerContainer = ({ pomodoroDone, isAnyWork}:ITimerContainer): JSX.
   }, [timerStarted]);
   return (
     <div className={styles.timerContainer}>
-      <CurrentPomodoro title={getCurrentStateDescription()} description={timer.currentPomodoroDescription} pomodorosLeft={timerSettings.pomodorosBeforLonBreak-timer.currentPomodoro+1} showPommodoros={timer.timerState==ETimerState.working}/>
+      <CurrentPomodoro title={getCurrentStateDescription()} description={timer.currentPomodoroDescription} pomodorosLeft={calculatePomodorosLeft()} showPommodoros={timer.timerState==ETimerState.working}/>
       <Timer countdown={timer.countdown} />
       <TimerControls timerState={timer.timerState} handleContinueTimer={handleContinueTimer} handleStopTimer={handleStopTimer} handleStartTimer={handleStartTimer} handlePauseTimer={handlePauseTimer} handleFastForwardTimer={handleFastForwardTimer}/>
     </div>
   );
 };
+
+
 

@@ -73,8 +73,8 @@ export function TasksContainer(): JSX.Element {
   //  handleContinueTimer();
   };
 
-  const isAnyWork=():boolean=>{
-    return tasks.some(x => !x.isCompleted && x.pomodoroUsed < x.pomodoroWeight);
+  const getNumberOfPomodorosToDo=():number=>{
+    return tasks.filter(x => !x.isCompleted).reduce((accumulator, task)=>accumulator+ task.pomodoroWeight-task.pomodoroUsed ,0);// && x.pomodoroUsed < x.pomodoroWeight);
   };
   const pomodoroDone=()=>{
     //search tasks for first red pomodoro and mark it as used
@@ -111,7 +111,7 @@ export function TasksContainer(): JSX.Element {
       </div>
       <TimerContainer
         pomodoroDone={pomodoroDone}
-        isAnyWork={isAnyWork}
+        getNumberOfPomodorosToDo={getNumberOfPomodorosToDo}
       />
     </>
   );
