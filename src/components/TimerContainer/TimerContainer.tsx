@@ -106,15 +106,19 @@ export const TimerContainer = ({ pomodoroDone, getNumberOfPomodorosToDo}:ITimerC
     if( saved_stat ){
       const arr= new Map(JSON.parse(saved_stat));
       if (arr.has(date)){
-
+        //increment
         arr.set(date,val + Number(arr.get(date)));
-        localStorage.setItem(stat, JSON.stringify([...arr]));
-        return;
+
       }
-
+      else{
+        //add date with value
+        arr.set(date, val );
+      }
+      localStorage.setItem(stat, JSON.stringify([...arr]));
     }
-
-    localStorage.setItem(stat, JSON.stringify([...new Map([[date,val]])]));
+    else{
+      localStorage.setItem(stat, JSON.stringify([...new Map([[date,val]])]));
+    }
 
   }
   function calculatePomodorosLeft(): number {
